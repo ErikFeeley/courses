@@ -12,47 +12,38 @@ open Course
 // ---------------------------------
 // Web app
 // ---------------------------------
-
 let webApp =
-    choose [
-        subRoute "/api"
-            (choose [
-                GET >=> choose [
-                    route "/courses" >=> handleGetCourses
-                    routef "/courses/%i" handleGetCourse
-                ]
-            ])
-        setStatusCode 404 >=> json "Not Found" ]
+    choose [ subRoute "/api" 
+                 (choose 
+                      [ GET >=> choose [ route "/courses" >=> handleGetCourses
+                                         routef "/courses/%i" handleGetCourse ] ])
+             setStatusCode 404 >=> json "Not Found" ]
 
 // ---------------------------------
 // Error handler
 // ---------------------------------
-
 let errorHandler (ex : Exception) (logger : ILogger) =
-    logger.LogError(EventId(), ex, "An unhandled exception has occurred while executing the request.")
+    logger.LogError
+        (EventId(), ex, 
+         "An unhandled exception has occurred while executing the request.")
     clearResponse >=> setStatusCode 500 >=> text ex.Message
 
 // ---------------------------------
 // Config and Main
 // ---------------------------------
-
 let configureCors (builder : CorsPolicyBuilder) =
-    builder.WithOrigins("http://localhost:8080")
-           .AllowAnyMethod()
-           .AllowAnyHeader()
-           |> ignore
+    builder.WithOrigins("http://localhost:8080").AllowAnyMethod()
+           .AllowAnyHeader() |> ignore
 
 let configureApp (app : IApplicationBuilder) =
     let env = app.ApplicationServices.GetService<IHostingEnvironment>()
     (match env.IsDevelopment() with
-    | true  -> app.UseDeveloperExceptionPage()
-    | false -> app.UseGiraffeErrorHandler errorHandler)
-        .UseHttpsRedirection()
-        .UseCors(configureCors)
-        .UseGiraffe(webApp)
+     | true -> app.UseDeveloperExceptionPage()
+     | false -> app.UseGiraffeErrorHandler errorHandler).UseHttpsRedirection()
+        .UseCors(configureCors).UseGiraffe(webApp)
 
 let configureServices (services : IServiceCollection) =
-    services.AddCors()    |> ignore
+    services.AddCors() |> ignore
     services.AddGiraffe() |> ignore
 
 let configureLogging (builder : ILoggingBuilder) =
@@ -61,12 +52,8 @@ let configureLogging (builder : ILoggingBuilder) =
 
 [<EntryPoint>]
 let main _ =
-    WebHostBuilder()
-        .UseKestrel()
-        .UseIISIntegration()
+    WebHostBuilder().UseKestrel().UseIISIntegration()
         .Configure(Action<IApplicationBuilder> configureApp)
-        .ConfigureServices(configureServices)
-        .ConfigureLogging(configureLogging)
-        .Build()
-        .Run()
+        .ConfigureServices(configureServices).ConfigureLogging(configureLogging)
+        .Build().Run()
     0
