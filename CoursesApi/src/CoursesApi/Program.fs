@@ -7,7 +7,7 @@ open Microsoft.AspNetCore.Hosting
 open Microsoft.Extensions.Logging
 open Microsoft.Extensions.DependencyInjection
 open Giraffe
-open CoursesApi.HttpHandlers
+open Course
 
 // ---------------------------------
 // Web app
@@ -18,10 +18,11 @@ let webApp =
         subRoute "/api"
             (choose [
                 GET >=> choose [
-                    route "/hello" >=> handleGetHello
+                    route "/courses" >=> handleGetCourses
+                    routef "/courses/%i" handleGetCourse
                 ]
             ])
-        setStatusCode 404 >=> text "Not Found" ]
+        setStatusCode 404 >=> json "Not Found" ]
 
 // ---------------------------------
 // Error handler
