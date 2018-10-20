@@ -1,0 +1,17 @@
+/home/erik/_dev/PersonalRepos/courses/CoursesApi/tests/CoursesApi.Tests/bin/Debug/netcoreapp2.1/web.config
+/home/erik/_dev/PersonalRepos/courses/CoursesApi/tests/CoursesApi.Tests/bin/Debug/netcoreapp2.1/xunit.runner.visualstudio.dotnetcore.testadapter.dll
+/home/erik/_dev/PersonalRepos/courses/CoursesApi/tests/CoursesApi.Tests/bin/Debug/netcoreapp2.1/xunit.runner.reporters.netcoreapp10.dll
+/home/erik/_dev/PersonalRepos/courses/CoursesApi/tests/CoursesApi.Tests/bin/Debug/netcoreapp2.1/xunit.runner.utility.netcoreapp10.dll
+/home/erik/_dev/PersonalRepos/courses/CoursesApi/tests/CoursesApi.Tests/bin/Debug/netcoreapp2.1/CoursesApi.Tests.deps.json
+/home/erik/_dev/PersonalRepos/courses/CoursesApi/tests/CoursesApi.Tests/bin/Debug/netcoreapp2.1/CoursesApi.Tests.runtimeconfig.json
+/home/erik/_dev/PersonalRepos/courses/CoursesApi/tests/CoursesApi.Tests/bin/Debug/netcoreapp2.1/CoursesApi.Tests.runtimeconfig.dev.json
+/home/erik/_dev/PersonalRepos/courses/CoursesApi/tests/CoursesApi.Tests/bin/Debug/netcoreapp2.1/CoursesApi.Tests.dll
+/home/erik/_dev/PersonalRepos/courses/CoursesApi/tests/CoursesApi.Tests/bin/Debug/netcoreapp2.1/CoursesApi.Tests.pdb
+/home/erik/_dev/PersonalRepos/courses/CoursesApi/tests/CoursesApi.Tests/bin/Debug/netcoreapp2.1/CoursesApi.dll
+/home/erik/_dev/PersonalRepos/courses/CoursesApi/tests/CoursesApi.Tests/bin/Debug/netcoreapp2.1/CoursesApi.pdb
+/home/erik/_dev/PersonalRepos/courses/CoursesApi/tests/CoursesApi.Tests/obj/Debug/netcoreapp2.1/CoursesApi.Tests.fsprojAssemblyReference.cache
+/home/erik/_dev/PersonalRepos/courses/CoursesApi/tests/CoursesApi.Tests/obj/Debug/netcoreapp2.1/CoursesApi.Tests.AssemblyInfoInputs.cache
+/home/erik/_dev/PersonalRepos/courses/CoursesApi/tests/CoursesApi.Tests/obj/Debug/netcoreapp2.1/CoursesApi.Tests.AssemblyInfo.fs
+/home/erik/_dev/PersonalRepos/courses/CoursesApi/tests/CoursesApi.Tests/obj/Debug/netcoreapp2.1/CoursesApi.Tests.fsproj.CopyComplete
+/home/erik/_dev/PersonalRepos/courses/CoursesApi/tests/CoursesApi.Tests/obj/Debug/netcoreapp2.1/CoursesApi.Tests.dll
+/home/erik/_dev/PersonalRepos/courses/CoursesApi/tests/CoursesApi.Tests/obj/Debug/netcoreapp2.1/CoursesApi.Tests.pdb
