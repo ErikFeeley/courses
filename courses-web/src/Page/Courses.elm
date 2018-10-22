@@ -1,7 +1,8 @@
 module Page.Courses exposing (Model, Msg, init, update, view)
 
 import Course exposing (Course)
-import Html exposing (Html, text)
+import Element exposing (Element, text)
+import Html exposing (Html)
 import Http
 import Url.Builder
 
@@ -41,7 +42,7 @@ init =
 
 view : Model -> Html Msg
 view model =
-    text "hi"
+    Element.layout [] (text "hi")
 
 
 

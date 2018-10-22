@@ -2,8 +2,7 @@ module Main exposing (main)
 
 import Browser
 import Browser.Navigation as Nav
-import Html exposing (..)
-import Html.Attributes exposing (..)
+import Html
 import Page.Courses as Courses
 import Page.NotFound as NotFound
 import Url
@@ -45,22 +44,10 @@ stepUrl url model =
             ( { model | page = NotFound }, Cmd.none )
 
 
-route : Parser a b -> a -> Parser (b -> c) c
-route parser handler =
-    Parser.map handler parser
-
-
-stepCourses : Model -> ( Courses.Model, Cmd Courses.Msg ) -> ( Model, Cmd Msg )
-stepCourses model ( courseModel, cmds ) =
-    ( { model | page = Courses courseModel }
-    , Cmd.map CoursesMsg cmds
-    )
-
-
 routeParser : Model -> Parser (( Model, Cmd Msg ) -> a) a
 routeParser model =
     oneOf
-        [ route Parser.top (stepCourses model Courses.init)
+        [ Parser.map (stepCourses model Courses.init) Parser.top
         ]
 
 
@@ -72,10 +59,7 @@ type alias Model =
 
 init : () -> Url.Url -> Nav.Key -> ( Model, Cmd Msg )
 init flags url key =
-    stepUrl url
-        { key = key
-        , page = NotFound
-        }
+    stepUrl url { key = key, page = NotFound }
 
 
 
@@ -90,9 +74,9 @@ view model =
             , body = [ NotFound.view ]
             }
 
-        Courses courses ->
+        Courses coursesModel ->
             { title = "Courses"
-            , body = [ Html.map CoursesMsg (Courses.view courses) ]
+            , body = [ Html.map CoursesMsg (Courses.view coursesModel) ]
             }
 
 
@@ -118,9 +102,7 @@ update message model =
                     ( model, Nav.load href )
 
         UrlChanged url ->
-            ( model
-            , Cmd.none
-            )
+            stepUrl url model
 
         CoursesMsg msg ->
             case model.page of
@@ -129,6 +111,13 @@ update message model =
 
                 _ ->
                     ( model, Cmd.none )
+
+
+stepCourses : Model -> ( Courses.Model, Cmd Courses.Msg ) -> ( Model, Cmd Msg )
+stepCourses model ( courseModel, courseCmds ) =
+    ( { model | page = Courses courseModel }
+    , Cmd.map CoursesMsg courseCmds
+    )
 
 
 
