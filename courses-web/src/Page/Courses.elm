@@ -1,4 +1,4 @@
-module Page.Course exposing (Model, Msg, init, view)
+module Page.Courses exposing (Model, Msg, init, update, view)
 
 import Course exposing (Course)
 import Html exposing (Html, text)

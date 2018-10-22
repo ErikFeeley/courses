@@ -4,7 +4,8 @@ import Browser
 import Browser.Navigation as Nav
 import Html exposing (..)
 import Html.Attributes exposing (..)
-import Page.Course as Course
+import Page.Courses as Courses
+import Page.NotFound as NotFound
 import Url
 import Url.Parser as Parser exposing ((</>), Parser, oneOf, s)
 
@@ -29,29 +30,70 @@ main =
 -- MODEL
 
 
-type Route
-    = Courses ( Course.Model, Cmd Course.Msg )
-    | Tutorial
+type Page
+    = NotFound
+    | Courses Courses.Model
 
 
-routeParser : Parser (Route -> a) a
-routeParser =
+stepUrl : Url.Url -> Model -> ( Model, Cmd Msg )
+stepUrl url model =
+    case Parser.parse (routeParser model) url of
+        Just answer ->
+            answer
+
+        Nothing ->
+            ( { model | page = NotFound }, Cmd.none )
+
+
+route : Parser a b -> a -> Parser (b -> c) c
+route parser handler =
+    Parser.map handler parser
+
+
+stepCourses : Model -> ( Courses.Model, Cmd Courses.Msg ) -> ( Model, Cmd Msg )
+stepCourses model ( courseModel, cmds ) =
+    ( { model | page = Courses courseModel }
+    , Cmd.map CoursesMsg cmds
+    )
+
+
+routeParser : Model -> Parser (( Model, Cmd Msg ) -> a) a
+routeParser model =
     oneOf
-        [ Parser.map Tutorial Parser.top
-        , Parser.map (Courses Course.init) (s "courses")
+        [ route Parser.top (stepCourses model Courses.init)
         ]
 
 
 type alias Model =
     { key : Nav.Key
-    , route : Maybe Route
-    , url : Url.Url
+    , page : Page
     }
 
 
 init : () -> Url.Url -> Nav.Key -> ( Model, Cmd Msg )
 init flags url key =
-    ( Model key (Parser.parse routeParser url) url, Cmd.none )
+    stepUrl url
+        { key = key
+        , page = NotFound
+        }
+
+
+
+-- VIEW
+
+
+view : Model -> Browser.Document Msg
+view model =
+    case model.page of
+        NotFound ->
+            { title = "Not found"
+            , body = [ NotFound.view ]
+            }
+
+        Courses courses ->
+            { title = "Courses"
+            , body = [ Html.map CoursesMsg (Courses.view courses) ]
+            }
 
 
 
@@ -61,11 +103,12 @@ init flags url key =
 type Msg
     = LinkClicked Browser.UrlRequest
     | UrlChanged Url.Url
+    | CoursesMsg Courses.Msg
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
-update msg model =
-    case msg of
+update message model =
+    case message of
         LinkClicked urlRequest ->
             case urlRequest of
                 Browser.Internal url ->
@@ -75,9 +118,17 @@ update msg model =
                     ( model, Nav.load href )
 
         UrlChanged url ->
-            ( { model | url = url }
+            ( model
             , Cmd.none
             )
+
+        CoursesMsg msg ->
+            case model.page of
+                Courses courses ->
+                    stepCourses model (Courses.update msg courses)
+
+                _ ->
+                    ( model, Cmd.none )
 
 
 
@@ -87,46 +138,3 @@ update msg model =
 subscriptions : Model -> Sub Msg
 subscriptions _ =
     Sub.none
-
-
-
--- VIEW
-
-
-view : Model -> Browser.Document Msg
-view model =
-    { title = "URL Interceptor"
-    , body =
-        [ viewBody model
-        ]
-    }
-
-
-viewBody : Model -> Html Msg
-viewBody model =
-    case model.route of
-        Just route ->
-            case route of
-                Tutorial ->
-                    div []
-                        [ text "The current URL is: "
-                        , b [] [ text (Url.toString model.url) ]
-                        , ul []
-                            [ viewLink "/home"
-                            , viewLink "/profile"
-                            , viewLink "/reviews/the-century-of-the-self"
-                            , viewLink "/reviews/public-opinion"
-                            , viewLink "/reviews/shah-of-shahs"
-                            ]
-                        ]
-
-                Courses courseModel ->
-                    div [] [ text "hmmm" ]
-
-        Nothing ->
-            div [] [ text "Not FOund" ]
-
-
-viewLink : String -> Html msg
-viewLink path =
-    li [] [ a [ href path ] [ text path ] ]
