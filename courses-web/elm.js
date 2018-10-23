@@ -5663,9 +5663,9 @@ var elm$url$Url$Builder$crossOrigin = F3(
 	});
 var author$project$Page$Courses$coursesApi = A3(
 	elm$url$Url$Builder$crossOrigin,
-	'https:localhost:5001',
+	'https:localhost:5001/api',
 	_List_fromArray(
-		['api', 'courses']),
+		['courses']),
 	_List_Nil);
 var elm$core$Basics$identity = function (x) {
 	return x;

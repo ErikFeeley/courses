@@ -23,7 +23,7 @@ type alias Model =
 
 coursesApi : String
 coursesApi =
-    Url.Builder.crossOrigin "https:localhost:5001" [ "api", "courses" ] []
+    Url.Builder.crossOrigin "https:localhost:5001/api" [ "courses" ] []
 
 
 getCourses : Cmd Msg
