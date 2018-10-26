@@ -34,8 +34,8 @@ type Page
     | Courses Courses.Model
 
 
-stepUrl : Url.Url -> Model -> ( Model, Cmd Msg )
-stepUrl url model =
+mapToRoute : Url.Url -> Model -> ( Model, Cmd Msg )
+mapToRoute url model =
     case Parser.parse (routeParser model) url of
         Just answer ->
             answer
@@ -47,7 +47,7 @@ stepUrl url model =
 routeParser : Model -> Parser (( Model, Cmd Msg ) -> a) a
 routeParser model =
     oneOf
-        [ Parser.map (stepCourses model Courses.init) Parser.top
+        [ Parser.map (passToCourses model Courses.init) Parser.top
         ]
 
 
@@ -59,7 +59,7 @@ type alias Model =
 
 init : () -> Url.Url -> Nav.Key -> ( Model, Cmd Msg )
 init flags url key =
-    stepUrl url { key = key, page = NotFound }
+    mapToRoute url { key = key, page = NotFound }
 
 
 
@@ -102,19 +102,19 @@ update message model =
                     ( model, Nav.load href )
 
         UrlChanged url ->
-            stepUrl url model
+            mapToRoute url model
 
         CoursesMsg msg ->
             case model.page of
                 Courses courses ->
-                    stepCourses model (Courses.update msg courses)
+                    passToCourses model (Courses.update msg courses)
 
                 _ ->
                     ( model, Cmd.none )
 
 
-stepCourses : Model -> ( Courses.Model, Cmd Courses.Msg ) -> ( Model, Cmd Msg )
-stepCourses model ( courseModel, courseCmds ) =
+passToCourses : Model -> ( Courses.Model, Cmd Courses.Msg ) -> ( Model, Cmd Msg )
+passToCourses model ( courseModel, courseCmds ) =
     ( { model | page = Courses courseModel }
     , Cmd.map CoursesMsg courseCmds
     )
