@@ -36,6 +36,9 @@ executables:
     dependencies:
     - courses-hapi
     - servant-server
+    - aeson
+    - wai
+    - warp 
 
 tests:
   courses-hapi-test:
